@@ -103,5 +103,11 @@ def hostel_based_search():
 #       and enter the website after prompt (you can press space key after the website if you are having trouble)
 #       website example: https://www.hostelworld.com/hosteldetails.php/Hostel-Fish/Denver/98583
 
-city_based_search()
-#hostel_based_search()
+
+
+#city_based_search()
+hostel_based_search()
+
+# result example from the Anderson Estates in Los Angeles:
+# ['NewZealand', 'Male', '18-24', '9.1'         , '10.0'                , '8.0'          , '8.0'          , '10.0'           , '10.0'      , '8.0'            , '10.0'            , 'the anderson estates provides value for money. for $25 per night i was able to get a free breakfast, free lunch, and access to an outdoor pool. the staff are friendly and nice and the place is tidy.']
+# [Nationality , gender,   age  , overall rating, value for money rating, security rating, location rating, facilities rating, staff rating, atmosphere rating, cleanliness rating, text review]
