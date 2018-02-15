@@ -1,5 +1,5 @@
 Function:
-	Download all the reciew of a specific hostel or hostels in a specific city
+	Download all the reciews of a specific hostel or hostels in a specific city
 
 Why I developed this program:
 	Recently I am doing a marketing research about hostel in Denver, and I need the
