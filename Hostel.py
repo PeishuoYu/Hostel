@@ -1,4 +1,6 @@
 import urllib.request
+import csv
+import os
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) '
                         'Chrome/60.0.3112.113 Safari/537.36'}
 
@@ -29,13 +31,14 @@ def get_review(url):
         review_page = '1'
     # go to each review page, and get the review detail
     review_page = int(review_page)
+    review = []
     for i in range(review_page):
         page_num = i + 1
         page_url = url + '/reviews?showOlderReviews=1&page=' + str(page_num) + '#reviewFilters'
         content = url_request(page_url)
         # take the review pages' html, print the review detail
-        get_detail(content)
-    return
+        review += get_detail(content)
+    return review
 
 # take the review pages' html, print the review detail
 def get_detail(content):
@@ -45,6 +48,7 @@ def get_detail(content):
     # make content a list of pieces of review
     content = content[begin:end].split('<div class="reviewlisting clearfix">')
     # in each piece of review, get the nationality, gender, textrating, ratings for individual items, and textreview
+    returnReview = []
     for i in content:
         i = i[i.find('<li class="reviewerdetails">') + 28:]
         # avoid error
@@ -60,10 +64,12 @@ def get_detail(content):
                 rating.append(i[i.find('<span>') + 6:i.find('</span>')])
                 i = i[i.find('</span>') + 2:]
                 num += 1
-            print(str([country[1:], gender, age, text_rating] + rating + [review_text]))
+            review = [country[1:], gender, age, text_rating] + rating + [review_text]
+            print(review)
+            returnReview.append(review)
         except:
             continue
-    return
+    return returnReview
 
 # get a list of hostel website from HostelWorld
 def get_list(url):
@@ -80,20 +86,40 @@ def get_list(url):
         content = content[2:]
     return hostel_list
 
+# this function will generation a csv file according to the name and review data provided
+def export_csv(name, review):
+    if os.path.exists(name + '.csv'):
+        os.remove(name + '.csv')
+    with open(name + '.csv', 'w', encoding='utf-8', newline='\n') as csvfile:
+        fieldnames = ['nationality', 'gender', 'age', 'overall rating', 'value for money rating', 'security rating', 'location rating', 'facilities rating', 'staff rating', 'atmosphere rating', 'cleanliness rating', 'text review']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for i in review:
+            writer.writerow({'nationality': i[0], 'gender': i[1], 'age' :i[2], 'overall rating':i[3], 'value for money rating':i[4], 'security rating':i[5], 'location rating':i[6], 'facilities rating':i[7], 'staff rating':i[8], 'atmosphere rating':i[9], 'cleanliness rating':i[10], 'text review':i[11]})
+
+
 # enter a city name, and the program will print all the reviews of the hostels in that city
 def city_based_search():
     city = input('Enter city: ').replace(' ', '-')
     url = 'https://www.hostelworld.com/findabed.php/ChosenCity.' + city +'/ChosenCountry.USA'
     hostel_list = get_list(url)
     print(hostel_list)
+    review = []
     for i in hostel_list:
-        get_review(i)
+        review += get_review(i)
+    print('exporting csv file...')
+    export_csv(city, review)
+    print('complete!')
 
 # you need to go to HostelWorld to find the specific hostel website
 # this function will prompt you to enter that website, and will print out all the reviews of that hostels
 def hostel_based_search():
     url = input('Copy HostelWorld website: ').replace(' ','')
-    get_review(url)
+    hostel_name = input('Hostel Name: ')
+    review = get_review(url)
+    print('exporting csv file...')
+    export_csv(hostel_name, review)
+    print('complete!')
 
 
 # instruction:
@@ -102,8 +128,7 @@ def hostel_based_search():
 #   for hostel based search, you need to go to HestelWorld and find the website of the hostel you are interested
 #       and enter the website after prompt (you can press space key after the website if you are having trouble)
 #       website example: https://www.hostelworld.com/hosteldetails.php/Hostel-Fish/Denver/98583
-
-
+#   the program will generate a csv file in the root folder, the name will be cityname.csv or hostelname.csv
 
 #city_based_search()
 hostel_based_search()
