@@ -7,4 +7,4 @@ Why I developed this program:
 
 Major Update 02/15/2017:
 	Added function to automatically generate csv file to store the data collected
-	Added two example (one for city search, one for hostel search) in the root folder
+	Added two examples (one for city search, one for hostel search) in the root folder
