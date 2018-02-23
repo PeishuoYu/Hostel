@@ -57,7 +57,7 @@ def get_detail(content):
             i = i[i.find('"textrating'):]
             text_rating = i[i.find('">') + 2:i.find('</div>')]
             i = i[i.find('"reviewtext translate"'):]
-            review_text = i[i.find('<p>') + 3:i.find('</p>')].replace('\r',' ').replace('\n', ' ').replace('&#039;', "'").lower().replace('&quot;', '"')
+            review_text = i[i.find('<p>') + 3:i.find('</p>')].replace('\r',' ').replace('\n', ' ').lower()
             rating = []
             num = 0
             while '<span>' in i and num < 7:
@@ -130,8 +130,8 @@ def hostel_based_search():
 #       website example: https://www.hostelworld.com/hosteldetails.php/Hostel-Fish/Denver/98583
 #   the program will generate a csv file in the root folder, the name will be cityname.csv or hostelname.csv
 
-#city_based_search()
-hostel_based_search()
+city_based_search()
+#hostel_based_search()
 
 # result example from the Anderson Estates in Los Angeles:
 # ['NewZealand', 'Male', '18-24', '9.1'         , '10.0'                , '8.0'          , '8.0'          , '10.0'           , '10.0'      , '8.0'            , '10.0'            , 'the anderson estates provides value for money. for $25 per night i was able to get a free breakfast, free lunch, and access to an outdoor pool. the staff are friendly and nice and the place is tidy.']
